@@ -2,11 +2,10 @@ package route
 
 import (
 	"notebook/database"
+	"notebook/tool"
 
 	"github.com/gin-gonic/gin"
 )
-
-type Data database.DataModel
 
 func NewRunRoute() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
@@ -18,8 +17,7 @@ func NewRunRoute() gin.HandlerFunc {
 
 func NewCreateRoute() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
-		var data Data
-		e := cxt.ShouldBindJSON(&data)
+		data, e := tool.GetData(cxt)
 		if e != nil {
 			cxt.JSON(200, gin.H{
 				"message": "error data",
@@ -44,10 +42,55 @@ func NewCreateRoute() gin.HandlerFunc {
 	}
 }
 
+func NewDeleteRoute() gin.HandlerFunc {
+	return func(cxt *gin.Context) {
+		data, e := tool.GetData(cxt)
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "error data",
+			})
+			return
+		}
+
+		e = database.NewDataModel().Delete(data.UID)
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "delete fail",
+			})
+			return
+		}
+		cxt.JSON(200, gin.H{
+			"message": "delete success",
+		})
+	}
+}
+
+func NewUpdataRoute() gin.HandlerFunc {
+	return func(cxt *gin.Context) {
+		data, e := tool.GetData(cxt)
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "sata error",
+			})
+			return
+		}
+
+		e = database.NewDataModel().Updata(&data)
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "updata fail",
+			})
+			return
+		}
+		cxt.JSON(200, gin.H{
+			"message": "updata success",
+		})
+	}
+}
+
 func NewGetRoute() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
-		var data Data
-		e := cxt.ShouldBindJSON(&data)
+		data, e := tool.GetData(cxt)
 		if e != nil {
 			cxt.JSON(200, gin.H{
 				"message": "error data",
@@ -58,7 +101,7 @@ func NewGetRoute() gin.HandlerFunc {
 		res, err := database.NewDataModel().Get(data.UID)
 		if err != nil {
 			cxt.JSON(200, gin.H{
-				"message": "this user has no note",
+				"message": "this user has no more note",
 			})
 			return
 		}

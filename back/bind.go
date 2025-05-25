@@ -11,5 +11,7 @@ func BindRoute(server *gin.Engine) {
 
 	servergroup.GET("/test", route.NewRunRoute())
 	servergroup.POST("/add", route.NewCreateRoute())
+	servergroup.POST("/delete", route.NewDeleteRoute())
+	servergroup.POST("/updata", route.NewUpdataRoute())
 	servergroup.POST("/get", route.NewGetRoute())
 }

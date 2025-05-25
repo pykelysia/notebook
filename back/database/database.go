@@ -19,6 +19,6 @@ func Open(source string) error {
 	if e != nil {
 		return e
 	}
-	e = database.AutoMigrate(&DataModel{})
+	e = database.AutoMigrate(&UserModel{})
 	return e
 }
