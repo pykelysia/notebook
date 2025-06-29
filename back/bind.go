@@ -7,6 +7,8 @@ import (
 )
 
 func BindRoute(server *gin.Engine) {
+	server.GET("/", route.NewRunRoute())
+
 	servergroup := server.Group("/")
 
 	servergroup.GET("/test", route.NewRunRoute())

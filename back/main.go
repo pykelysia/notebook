@@ -9,6 +9,7 @@ import (
 
 func main() {
 	server := gin.New()
+	BindRoute(server)
 
 	database.Open("data.db")
 
