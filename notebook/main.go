@@ -1,6 +1,7 @@
 package main
 
 import (
+	"net/http"
 	"notebook/config"
 	"notebook/database"
 
@@ -8,7 +9,9 @@ import (
 )
 
 func main() {
-	server := gin.New()
+	server := gin.Default()
+	server.LoadHTMLGlob("template/*")
+	server.StaticFS("/static", http.Dir("./static"))
 	BindRoute(server)
 
 	database.Open("data.db")

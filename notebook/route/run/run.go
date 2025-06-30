@@ -2,6 +2,7 @@ package route
 
 import (
 	"fmt"
+	"net/http"
 	"notebook/database"
 	"notebook/tool"
 
@@ -9,9 +10,8 @@ import (
 )
 
 func NewRunRoute() gin.HandlerFunc {
-	fmt.Println("io")
 	return func(cxt *gin.Context) {
-		cxt.JSON(200, gin.H{
+		cxt.HTML(http.StatusOK, "index.html", gin.H{
 			"message": "success",
 		})
 	}
@@ -67,7 +67,7 @@ func NewDeleteRoute() gin.HandlerFunc {
 	}
 }
 
-func NewUpdataRoute() gin.HandlerFunc {
+func NewUpdateRoute() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
 		data, e := tool.GetData(cxt)
 		if e != nil {
