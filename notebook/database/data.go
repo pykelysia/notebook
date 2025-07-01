@@ -1,7 +1,7 @@
 package database
 
 type DataModel struct {
-	UID  uint   `gorm:"unique" json:"id"`
+	UID  uint   `gorm:"primaryKey;unique" json:"id"`
 	Data string `json:"data"`
 	Done bool   `json:"done"`
 }
@@ -24,7 +24,7 @@ func (*DataModel) Delete(id uint) error {
 }
 
 func (*DataModel) Updata(item *DataModel) error {
-	return database.Save(item).Error
+	return database.Model(&DataModel{}).Where("uid = ?", item.UID).Updates(item).Error
 }
 
 func (*DataModel) TableName() string {

@@ -39,7 +39,8 @@ function addReminder() {
     const text = input.value.trim();
     
     if (text) {
-        num+=1;
+        num = num + 1;
+        console.log(num);
         addReminderToBack(num, text).then((success) => {
             if(!success){
                 return;
@@ -51,7 +52,9 @@ function addReminder() {
         newItem.innerHTML = `
             <div class="checkbox"></div>
             <div class="reminder-text" id ="${num}">${text}</div>`;
-            newItem.querySelector('.checkbox').addEventListener('click', function() {
+
+        newItem.querySelectorAll('.checkbox').forEach(checkbox => {
+            checkbox.addEventListener('click', function() {
                 this.classList.toggle('checked');
                 this.nextElementSibling.classList.toggle('completed');
                 if(this.classList.contains("checked")){
@@ -64,7 +67,23 @@ function addReminder() {
                         console.log(success);
                     })
                 }
-        });
+            });
+        })
+            
+        // newItem.querySelector('.checkbox').addEventListener('click', function() {
+        //     this.classList.toggle('checked');
+        //     this.nextElementSibling.classList.toggle('completed');
+        //     if(this.classList.contains("checked")){
+        //         updata(parseInt(this.nextElementSibling.id, 10), this.nextElementSibling.innerHTML, true).then((success) => {
+        //             console.log(success);
+        //         })
+        //     }
+        //     else{
+        //         updata(parseInt(this.nextElementSibling.id, 10), this.nextElementSibling.innerHTML, false).then((success) => {
+        //             console.log(success);
+        //         })
+        //     }
+        // });
         list.prepend(newItem);
         input.value = '';
     }

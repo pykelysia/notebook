@@ -76,7 +76,6 @@ func NewUpdateRoute() gin.HandlerFunc {
 			})
 			return
 		}
-
 		e = database.NewDataModel().Updata(&data)
 		if e != nil {
 			cxt.JSON(200, gin.H{

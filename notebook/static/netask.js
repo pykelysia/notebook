@@ -8,7 +8,7 @@ export async function addReminderToBack(num, text) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            UID: num,
+            ID: num,
             Data: text,
             Done: false
         })
@@ -55,6 +55,7 @@ export async function addReminderToBack(num, text) {
 // }
 
 export async function updata(num, text, done) {
+
     
     const response = await fetch(ipConfig + "/updata", {
         method: "POST",
@@ -62,11 +63,13 @@ export async function updata(num, text, done) {
             "Content-Type": "application/json",
         },
         body: JSON.stringify({
-            UID: num,
+            ID: num,
             Data: text,
             Done: done
         })
     });
+
+    console.log(num);
 
     if(!response.ok){        
         throw new Error("updata failed, Net word error");
