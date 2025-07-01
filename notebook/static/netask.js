@@ -28,31 +28,31 @@ export async function addReminderToBack(num, text) {
     }
 }
 
-// export async function getReminderFromBack(num) {
+export async function getReminderFromBack(num) {
     
-//     const response = await fetch(ipConfig + "/get", {
-//         method: "POST",
-//         headers: {
-//             "Content-Type": "application/json",
-//         },
-//         body: JSON.stringify({
-//             UID: num,
-//         })
-//     });
+    const response = await fetch(ipConfig + "/get", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            ID: num,
+        })
+    });
 
-//     if(!response.ok){
-//         throw new Error("get failed, Net word error");
-//     }
+    if(!response.ok){
+        throw new Error("get failed, Net word error");
+    }
 
-//     const data = await response.json();
+    const data = await response.json();
 
-//     if(data.message == "success" || data.message == "this user has no more note"){
-//         return data;
-//     }
-//     else {
-//         throw new Error(data.message)
-//     }
-// }
+    if(data.message == "success" || data.message == "this user has no more note"){
+        return data;
+    }
+    else {
+        throw new Error(data.message)
+    }
+}
 
 export async function updata(num, text, done) {
 
