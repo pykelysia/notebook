@@ -1,4 +1,4 @@
-const ipConfig = "http://localhost:5173";
+const ipConfig = "http://47.95.200.35:8089";
 
 export async function addReminderToBack(num, text) {
 
