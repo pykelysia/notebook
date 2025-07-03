@@ -1,8 +1,9 @@
 package database
 
 type UserModel struct {
-	UID    uint `gorm:"unique"`
-	Number uint
+	UID    uint   `gorm:"unique;primaryKey" json:"uid"`
+	Number uint   `json:"num"`
+	Code   []uint `gorm:"type:varint(255)[]" json:"code"`
 }
 
 func NewUserModel() *UserModel {

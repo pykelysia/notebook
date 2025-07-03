@@ -19,6 +19,11 @@ func BindRoute(server *gin.Engine) {
 	servergroup.POST("/delete", route.NewDeleteRoute())
 	servergroup.POST("/updata", route.NewUpdateRoute())
 	servergroup.POST("/get", route.NewGetRoute())
+
+	usergroup := server.Group("/user")
+
+	usergroup.POST("/signup", route.SignUp())
+	usergroup.POST("/signin", route.SignIn())
 }
 
 func main() {

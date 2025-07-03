@@ -26,12 +26,28 @@ func NewCreateRoute() gin.HandlerFunc {
 			})
 			return
 		}
+		user, e := tool.GetUser((cxt))
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "error data",
+			})
+			return
+		}
 
 		e = database.NewDataModel().Create(&database.DataModel{
 			UID:  data.UID,
 			Data: data.Data,
 			Done: data.Done,
 		})
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "add failed",
+			})
+			return
+		}
+		__user, _ := database.NewUserModel().Get(user.UID)
+		__user.Code = append(__user.Code, data.UID)
+		e = database.NewUserModel().Updata(&__user)
 		if e != nil {
 			cxt.JSON(200, gin.H{
 				"message": "add failed",
