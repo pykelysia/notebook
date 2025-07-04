@@ -115,8 +115,6 @@ func CheckUID() gin.HandlerFunc {
 		}
 
 		__user, _ := database.NewUserModel().Get(user.UID)
-		fmt.Println(__user)
-		fmt.Println(user)
 		if __user.UID == 0 {
 			fmt.Println("?")
 			cxt.JSON(200, gin.H{

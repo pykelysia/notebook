@@ -22,7 +22,6 @@ func NewCreateRoute() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
 		uad, e := tool.GetUaD(cxt)
 		if e != nil {
-			fmt.Println(uad)
 			cxt.JSON(200, gin.H{
 				"message": "error data",
 			})
