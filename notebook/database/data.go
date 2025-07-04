@@ -27,7 +27,7 @@ func (*DataModel) Delete(id uint) error {
 }
 
 func (*DataModel) Updata(item *DataModel) error {
-	return database.Model(&DataModel{}).Where("uid = ?", item.ID).Updates(item).Error
+	return database.Model(&DataModel{}).Where("id = ?", item.ID).Updates(item).Error
 }
 
 func (*DataModel) TableName() string {

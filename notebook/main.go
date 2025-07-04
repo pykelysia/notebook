@@ -27,6 +27,7 @@ func BindRoute(server *gin.Engine) {
 	usergroup := server.Group("/user")
 
 	usergroup.POST("/get", route.GetCode())
+	usergroup.POST("/check", route.CheckUID())
 	usergroup.POST("/signup", route.SignUp())
 	usergroup.POST("/signin", route.SignIn())
 }

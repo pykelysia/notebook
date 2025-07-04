@@ -9,8 +9,6 @@ function addReminder() {
 
     const input = document.getElementById('newReminder');
     const text = input.value.trim();
-
-    console.log(text);
     
     if (text) {
         addReminderToBack(text).then((data) => {
@@ -48,15 +46,15 @@ document.querySelectorAll('.checkbox').forEach(checkbox => {
     checkbox.addEventListener('click', beClick);
 });
 
-function beClick(){
+export function beClick(){
     if(this.classList.contains("checked")){
-        updata(parseInt(this.nextElementSibling.id, 10), this.nextElementSibling.innerHTML, true).then((success) => {
+        updata(parseInt(this.nextElementSibling.id, 10), this.nextElementSibling.innerHTML, true).then(() => {
             this.classList.toggle('checked');
             this.nextElementSibling.classList.toggle('completed');
         })
     }
     else{
-        updata(parseInt(this.nextElementSibling.id, 10), this.nextElementSibling.innerHTML, false).then((success) => {
+        updata(parseInt(this.nextElementSibling.id, 10), this.nextElementSibling.innerHTML, false).then(() => {
             this.classList.toggle('checked');
             this.nextElementSibling.classList.toggle('completed');
         })

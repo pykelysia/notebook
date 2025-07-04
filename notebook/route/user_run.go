@@ -1,6 +1,7 @@
 package route
 
 import (
+	"fmt"
 	"notebook/database"
 	"notebook/tool"
 
@@ -89,8 +90,8 @@ func GetCode() gin.HandlerFunc {
 			return
 		}
 
-		__user, e := database.NewUserModel().Get(user.UID)
-		if e == nil {
+		__user, _ := database.NewUserModel().Get(user.UID)
+		if __user.UID == 0 {
 			cxt.JSON(200, gin.H{
 				"message": "user has not exist",
 			})
@@ -98,7 +99,33 @@ func GetCode() gin.HandlerFunc {
 		}
 		cxt.JSON(200, gin.H{
 			"code":    __user.Code,
-			"messsge": "success",
+			"message": "success",
+		})
+	}
+}
+
+func CheckUID() gin.HandlerFunc {
+	return func(cxt *gin.Context) {
+		user, e := tool.GetUser(cxt)
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "data error",
+			})
+			return
+		}
+
+		__user, _ := database.NewUserModel().Get(user.UID)
+		fmt.Println(__user)
+		fmt.Println(user)
+		if __user.UID == 0 {
+			fmt.Println("?")
+			cxt.JSON(200, gin.H{
+				"message": "user has not exist",
+			})
+			return
+		}
+		cxt.JSON(200, gin.H{
+			"message": "right",
 		})
 	}
 }

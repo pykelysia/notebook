@@ -40,7 +40,7 @@ func (*UserModel) Delete(id uint) error {
 }
 
 func (*UserModel) Updata(item *UserModel) error {
-	return database.Save(item).Error
+	return database.Model(&UserModel{}).Where("uid = ?", item.UID).Updates(item).Error
 }
 
 func (*UserModel) TableName() string {

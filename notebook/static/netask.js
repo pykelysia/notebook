@@ -1,5 +1,7 @@
 const ipConfig = "http://localhost:8089";
 
+import {beClick} from "./main.js"
+
 export const url = new URL(window.location.href);
 export const searchParams = new URLSearchParams(url.search);
 export const uid = parseInt(searchParams.get('uid'), 10);
@@ -39,49 +41,54 @@ export async function addReminderToBack(text) {
 
 export async function getReminder() {
     //获取uid下的所有date的code
-    let code;
-    async () => {
-
-        const response = await fetch(ipConfig + "/user/get", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-                UID: uid,
+    getCode(uid).then( code => {
+        //按code从back end提取dates
+        for(let i in code){
+            const data = getReminderFromBack(parseInt(code[i], 10)); //code : string
+            getReminderFromBack(parseInt(code[i], 10)).then( data => {
+                const list = document.querySelector('.reminders-list');
+                const newItem = document.createElement('div');
+                newItem.className = 'reminder-item';
+                newItem.innerHTML = `
+                    <div class="checkbox"></div>
+                    <div class="reminder-text" id ="${data.id+''}">${data.data}</div>`;
+                newItem.querySelector('.checkbox').addEventListener('click', beClick);
+                list.prepend(newItem);
+                const child = newItem.querySelector('.checkbox');
+                if(data.done){
+                    child.classList.toggle('checked');
+                    child.nextElementSibling.classList.toggle('completed');
+                }
             })
-        });
-
-        if (!response.ok) {
-            throw new Error("get failed, Net word error");
         }
+    })
+}
 
-        const data = await response.json();
+//获取code
 
-        console.log(data.code)
+async function getCode(uid) {
 
-        if (data.message == "success") {
-            code = data.code;
-        }
-        else {
-            throw new Error(data.message)
-        }
+    const response = await fetch(ipConfig + "/user/get", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+            UID: uid,
+        })
+    });
+
+    if (!response.ok) {
+        throw new Error("get failed, Net word error");
     }
-    //按code从back end提取date
-    for(i in code){
-        const data = await getReminderFromBack(parseInt(code[i], 10)); //code : string
 
-        if (data.message == "this user has no more note")
-            break;
-        console.log(data.data);
-        const list = document.querySelector('.reminders-list');
-        const newItem = document.createElement('div');
-        newItem.className = 'reminder-item';
-        newItem.innerHTML = `
-            <div class="checkbox"></div>
-            <div class="reminder-text" id ="${data.ID}">${data.data}</div>`;
-        newItem.querySelector('.checkbox').addEventListener('click', beClick);
-        list.prepend(newItem);
+    const data = await response.json();
+
+    if (data.message == "success") {
+        return data.code;
+    }
+    else {
+        throw new Error(data.message)
     }
 }
 
@@ -126,8 +133,6 @@ export async function updata(num, text, done) {
             Done: done
         })
     });
-
-    console.log(num);
 
     if (!response.ok) {
         throw new Error("updata failed, Net word error");
