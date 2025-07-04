@@ -7,6 +7,14 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
+func RunUser() gin.HandlerFunc {
+	return func(cxt *gin.Context) {
+		cxt.HTML(200, "user.html", gin.H{
+			"message": "success",
+		})
+	}
+}
+
 func SignIn() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
 		user, e := tool.GetUser(cxt)
@@ -66,6 +74,30 @@ func SignUp() gin.HandlerFunc {
 			return
 		}
 		cxt.JSON(200, gin.H{
+			"messsge": "success",
+		})
+	}
+}
+
+func GetCode() gin.HandlerFunc {
+	return func(cxt *gin.Context) {
+		user, e := tool.GetUser(cxt)
+		if e != nil {
+			cxt.JSON(200, gin.H{
+				"message": "data error",
+			})
+			return
+		}
+
+		__user, e := database.NewUserModel().Get(user.UID)
+		if e == nil {
+			cxt.JSON(200, gin.H{
+				"message": "user has not exist",
+			})
+			return
+		}
+		cxt.JSON(200, gin.H{
+			"code":    __user.Code,
 			"messsge": "success",
 		})
 	}

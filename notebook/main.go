@@ -11,6 +11,7 @@ import (
 )
 
 func BindRoute(server *gin.Engine) {
+	//主界面
 	server.GET("/", route.NewRunRoute())
 
 	servergroup := server.Group("/")
@@ -20,8 +21,12 @@ func BindRoute(server *gin.Engine) {
 	servergroup.POST("/updata", route.NewUpdateRoute())
 	servergroup.POST("/get", route.NewGetRoute())
 
+	//用户相关
+	server.GET("/user", route.RunUser())
+
 	usergroup := server.Group("/user")
 
+	usergroup.POST("/get", route.GetCode())
 	usergroup.POST("/signup", route.SignUp())
 	usergroup.POST("/signin", route.SignIn())
 }

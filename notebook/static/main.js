@@ -1,39 +1,20 @@
+import "./netask.js"
 
-import { addReminderToBack, updata, getReminderFromBack } from "./netask.js";
-
-let num = 1;
+import { getReminder, addReminderToBack, updata } from "./netask.js";
 
 getReminder();
-
-async function getReminder() {
-    while(true){
-        const data = await getReminderFromBack(num);
-
-        if(data.message == "this user has no more note")
-            break;
-        console.log(data.data);
-        const list = document.querySelector('.reminders-list');
-        const newItem = document.createElement('div');
-        newItem.className = 'reminder-item';
-        newItem.innerHTML = `
-            <div class="checkbox"></div>
-            <div class="reminder-text" id ="${data.ID}">${data.data}</div>`;
-        newItem.querySelector('.checkbox').addEventListener('click', beClick);
-        list.prepend(newItem);
-        num+=1;
-    }
-}
 
 // 写入Add
 function addReminder() {
 
     const input = document.getElementById('newReminder');
     const text = input.value.trim();
+
+    console.log(text);
     
     if (text) {
-        console.log(num);
-        addReminderToBack(num, text).then((success) => {
-            if(!success){
+        addReminderToBack(text).then((data) => {
+            if(data.message != 'success'){
                 return;
             }
             const list = document.querySelector('.reminders-list');
@@ -41,7 +22,7 @@ function addReminder() {
             newItem.className = 'reminder-item';
             newItem.innerHTML = `
                 <div class="checkbox"></div>
-                <div class="reminder-text" id ="${num}">${text}</div>`;
+                <div class="reminder-text" id ="${data.num}">${text}</div>`;
 
             newItem.querySelectorAll('.checkbox').forEach(checkbox => {
                 checkbox.addEventListener('click', beClick);
@@ -49,7 +30,6 @@ function addReminder() {
 
             list.prepend(newItem);
             input.value = '';
-            num = num + 1;
             })
     }
 }

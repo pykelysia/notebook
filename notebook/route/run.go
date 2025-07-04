@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"notebook/database"
 	"notebook/tool"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -19,15 +20,9 @@ func NewRunRoute() gin.HandlerFunc {
 
 func NewCreateRoute() gin.HandlerFunc {
 	return func(cxt *gin.Context) {
-		data, e := tool.GetData(cxt)
+		uad, e := tool.GetUaD(cxt)
 		if e != nil {
-			cxt.JSON(200, gin.H{
-				"message": "error data",
-			})
-			return
-		}
-		user, e := tool.GetUser((cxt))
-		if e != nil {
+			fmt.Println(uad)
 			cxt.JSON(200, gin.H{
 				"message": "error data",
 			})
@@ -35,18 +30,18 @@ func NewCreateRoute() gin.HandlerFunc {
 		}
 
 		e = database.NewDataModel().Create(&database.DataModel{
-			UID:  data.UID,
-			Data: data.Data,
-			Done: data.Done,
-		})
+			ID:   database.DataNum,
+			Data: uad.Data,
+			Done: uad.Done,
+		}) //内置一次database.DateNum++
 		if e != nil {
 			cxt.JSON(200, gin.H{
 				"message": "add failed",
 			})
 			return
 		}
-		__user, _ := database.NewUserModel().Get(user.UID)
-		__user.Code = append(__user.Code, data.UID)
+		__user, _ := database.NewUserModel().Get(uad.UID)
+		__user.Code = append(__user.Code, strconv.Itoa(int(database.DataNum-1)))
 		e = database.NewUserModel().Updata(&__user)
 		if e != nil {
 			cxt.JSON(200, gin.H{
@@ -70,7 +65,7 @@ func NewDeleteRoute() gin.HandlerFunc {
 			return
 		}
 
-		e = database.NewDataModel().Delete(data.UID)
+		e = database.NewDataModel().Delete(data.ID)
 		if e != nil {
 			cxt.JSON(200, gin.H{
 				"message": "delete fail",
@@ -116,7 +111,7 @@ func NewGetRoute() gin.HandlerFunc {
 			return
 		}
 
-		res, err := database.NewDataModel().Get(data.UID)
+		res, err := database.NewDataModel().Get(data.ID)
 		if err != nil {
 			cxt.JSON(200, gin.H{
 				"message": "this user has no more note",
@@ -124,7 +119,7 @@ func NewGetRoute() gin.HandlerFunc {
 			return
 		}
 		cxt.JSON(200, gin.H{
-			"id":      res.UID,
+			"id":      res.ID,
 			"data":    res.Data,
 			"done":    res.Done,
 			"message": "success",
