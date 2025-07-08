@@ -1,4 +1,3 @@
-import "./netask.js"
 
 import { getReminder, addReminderToBack, updata } from "./netask.js";
 

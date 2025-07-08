@@ -37,4 +37,8 @@ go build main.go
 
 0.2.0(v1)版本（2025/7/4）新增 user 数据库，各自使用数据。
 
+***特别注意：***
+
+0.2.0(v1)版本下uid和password是相同的，具体可见$ notebook/static/user.js $第77行
+
 暂时无删除功能。
