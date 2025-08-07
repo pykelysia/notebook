@@ -9,8 +9,8 @@ const switchBtn = document.getElementById('switch-btn');
 const switchText = document.getElementById('switch-text');
 
 loginTab.addEventListener('click', () => {
-    loginTab.classList.remove('active');
-    signupTab.classList.add('active');
+    signupTab.classList.remove('active');
+    loginTab.classList.add('active');
     loginForm.classList.remove('active');
     signupForm.classList.remove('active');
     switchText.textContent = '没有账户?';
@@ -18,8 +18,8 @@ loginTab.addEventListener('click', () => {
 });
 
 signupTab.addEventListener('click', () => {
-    signupTab.classList.remove('active');
-    loginTab.classList.add('active');
+    loginTab.classList.remove('active');
+    signupTab.classList.add('active');
     signupForm.classList.add('active');
     loginForm.classList.add('active');
     switchText.textContent = '已有账户?';
@@ -74,7 +74,7 @@ document.getElementById('signup-action').addEventListener('click', e => {
         alert('密码不能为空');
         return;
     }
-    userSignup(parseInt(uid, 10), parseInt(uid, 10)).then(e => {
+    userSignup(parseInt(uid, 10), parseInt(password, 10)).then(e => {
         if(e)
             console.log("sign up success");
     })
