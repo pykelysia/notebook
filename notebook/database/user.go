@@ -1,8 +1,25 @@
 package database
 
+import (
+	"database/sql/driver"
+	"encoding/json"
+)
+
+type Code []string
+
 type UserModel struct {
-	UID    uint `gorm:"unique"`
-	Number uint
+	UID    uint `gorm:"unique;primaryKey" json:"uid"`
+	Number uint `json:"password"`
+	Code   Code `json:"code"`
+}
+
+func (t *Code) Scan(value interface{}) error {
+	bytesValue, _ := value.([]byte)
+	return json.Unmarshal(bytesValue, t)
+}
+
+func (t Code) Value() (driver.Value, error) {
+	return json.Marshal(t)
 }
 
 func NewUserModel() *UserModel {
@@ -23,7 +40,7 @@ func (*UserModel) Delete(id uint) error {
 }
 
 func (*UserModel) Updata(item *UserModel) error {
-	return database.Save(item).Error
+	return database.Model(&UserModel{}).Where("uid = ?", item.UID).Updates(item).Error
 }
 
 func (*UserModel) TableName() string {

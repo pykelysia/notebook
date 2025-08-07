@@ -1,5 +1,5 @@
 package config
 
 func Load() string {
-	return ":8089"
+	return "localhost:8089"
 }
